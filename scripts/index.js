@@ -12,16 +12,15 @@ function creatCard(item) {
     imgCard.src = item.link;
     imgCard.alt = item.name;
     itemCard.querySelector('.card__title').textContent = item.name;
-
-// @todo: Функция удаления карточки 
-    deleteButton.addEventListener('click',function (){
-        const deleteCard = deleteButton.closest('.places__item');
-        deleteCard.remove();
-    });
-
+    deleteButton.addEventListener('click',deleteCard);
     return itemCard;
 }
 
+
+// @todo: Функция удаления карточки 
+function deleteCard(evt){
+    evt.target.closest('.places__item').remove();
+}
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function(item){
     addTemplate = creatCard(item);
