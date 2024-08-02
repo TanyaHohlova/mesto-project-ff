@@ -1,148 +1,98 @@
 import '../pages/index.css';
-import {initialCards, createCard, deleteCard} from './cards.js';
-import {addCardForm, clickOnOverlay} from './modal.js';
-
+import {initialCards} from './cards.js';
+import {deleteCloseModalKeyEscepe,deleteHandlclickOnOverlay, closeButtonModal, openPopupEditProfile, openPopupNewCard, removeClassOpenPopup} from './modal.js';
+import {createCard, onDeleteCard, onLikeCard, openImagePopup} from './card.js'
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector('#card-template').content;
+
 
 // @todo: DOM узлы
 const cardList = document.querySelector('.places__list');
 
-const editButtom =  document.querySelector('.profile__edit-button');
-const addButtom =  document.querySelector('.profile__add-button');
-const imgeButton = document.querySelectorAll('.card__image');
-const closePopupButton = document.querySelectorAll('.popup__close');
-
-const lickButton  = document.querySelectorAll('.card__like-button');
-
-let popups = document.querySelectorAll('.popup');
-
-const popupEdit = document.querySelector('.popup_type_edit');
-const popupNew_card = document.querySelector('.popup_type_new-card');
-let popupImge = document.querySelector('.popup_type_image');
-
-const formElement = document.forms['edit-profile'];
-const nameInput = document.querySelector('.popup__input_type_name');
-const jobInput = document.querySelector('.popup__input_type_description');
-
-const formCardElement = document.forms['new-place'];
-let cardNameameInput = document.querySelector('.popup__input_type_card-name');
-let cardLinkInput = document.querySelector('.popup__input_type_url');
-
-let addTemplate;
-
 // @todo: Вывести карточки на страницу
-initialCards.forEach(function(item){
-    addTemplate = createCard(item);
+
+initialCards.forEach(function(cardData){
+    const addTemplate = createCard(cardData, onDeleteCard, onLikeCard, openImagePopup);
     cardList.append(addTemplate);
 });
+
+const buttomEdit =  document.querySelector('.profile__edit-button');
+const buttomAddCard =  document.querySelector('.profile__add-button');
+const buttomImge = document.querySelectorAll('.card__image');
+const buttonCloseModal = document.querySelectorAll('.popup__close');
+
+const buttonLikePopupCards = document.querySelectorAll('.card__like-button');
+
+const popups = document.querySelectorAll('.popup');
+
+const popupEditProfile = document.querySelector('.popup_type_edit');
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+
+const popupNewCard = document.querySelector('.popup_type_new-card');
+const popupImge = document.querySelector('.popup_type_image');
+
+const formEditProfile = document.forms['edit-profile'];
+const formInputProfileName = document.querySelector('.popup__input_type_name');
+const formInputProfileJob = document.querySelector('.popup__input_type_description');
+
+const formNewPlace = document.forms['new-place'];
+const formInputCardName = document.querySelector('.popup__input_type_card-name');
+const formInputCardLink = document.querySelector('.popup__input_type_url');
+
+
 /*-----------open------------------*/
- 
-editButtom.addEventListener('click', (evt)=> {
-    nameInput.value = document.querySelector('.profile__title').textContent;
-    jobInput.value = document.querySelector('.profile__description').textContent;
-    popupEdit.classList.add('popup_is-opened');
-    clickOnOverlay()
-});
+openPopupEditProfile(popupEditProfile);
+openPopupNewCard(popupNewCard);
 
-addButtom.addEventListener('click', ()=> {
-    popupNew_card.classList.add('popup_is-opened');
-    clickOnOverlay() 
-});
-
-imgeButton.forEach(img => {
-    img.addEventListener('click', addCardForm);
-    clickOnOverlay()
-});
-
-/*-------------close---------------*/
-closePopupButton.forEach(button => {
-    button.addEventListener('click', () => {
-        for (let i = 0; i < popups.length; i++) {
-            popups[i].classList.remove('popup_is-opened');
-        }
-    })
-});
-
-/*-------------close-Escepe---------------*/
-document.addEventListener('keyup', function(evt) {
-    if (evt.code === 'Escape') {
-        for (let i = 0; i < popups.length; i++){
-            popups[i].classList.remove('popup_is-opened')
-        }
-    }
-});
+/*-------------close-button--------------*/
+closeButtonModal(buttonCloseModal);
 
 /*-------------editing-profile---------------*/
-// Находим форму в DOM
-
-// Обработчик «отправки» формы, хотя пока
-// она никуда отправляться не будет
-function handleFormSubmit(evt) {
+function handleFormProfile(evt) {
     evt.preventDefault(); 
-    // Получите значение полей jobInput и nameInput из свойства value
-    const titleValue = nameInput.value;
-    const jobValue = jobInput.value;
-    // Выберите элементы, куда должны быть вставлены значения полей
-    const profileTitle = document.querySelector('.profile__title');
-    const profileDescription = document.querySelector('.profile__description');
-    // Вставьте новые значения с помощью textContent
+
+    const titleValue = formInputProfileName.value;
+    const jobValue = formInputProfileJob.value;
+
     profileTitle.textContent = titleValue ;
     profileDescription.textContent = jobValue;
 
-    for (let i = 0; i < popups.length; i++){
-        popups[i].classList.remove('popup_is-opened')
-    }
+    removeClassOpenPopup(popupEditProfile)
+    deleteCloseModalKeyEscepe()
+    deleteHandlclickOnOverlay(popupEditProfile)
 };
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
-formElement.addEventListener('submit', handleFormSubmit);
+
+formEditProfile.addEventListener('submit', handleFormProfile);
 
 /*---------------editing-card----------------------*/
-
-// Находим форму в DOM
-
-// Обработчик «отправки» формы, хотя пока
-// она никуда отправляться не будет
 function handleFormCard(evt) {
     evt.preventDefault(); 
-    // Получите значение полей jobInput и nameInput из свойства value
-    const titleValue = cardNameameInput.value;
-    const LinkValue = cardLinkInput.value;
-    // Выберите элементы, куда должны быть вставлены значения полей
-    const itemCard = cardTemplate.querySelector('.places__item').cloneNode(true);
-    const imgCard = itemCard.querySelector('.card__image');
-    // Вставьте новые значения с помощью textContent
-  
-    imgCard.src = LinkValue;
-    imgCard.alt = titleValue;
-    itemCard.querySelector('.card__title').textContent = titleValue;
 
-    cardList.prepend(itemCard);
+    const titleValue = formInputCardName.value;
+    const LinkValue = formInputCardLink.value;
+
+    const initialCard = {name:titleValue, link:LinkValue};
+    const element = createCard(initialCard, onDeleteCard, onLikeCard, openImagePopup )
+
+    console.log(element)
+    cardList.prepend(element);
 //  https://porodysobak.ru/wp-content/uploads/2023/02/kanarskij-dog-3.jpeg
-    cardNameameInput.value = '';
-    cardLinkInput.value = '';
 
-    for (let i = 0; i < popups.length; i++){
-        popups[i].classList.remove('popup_is-opened')
-    }
+    removeClassOpenPopup(popupNewCard)
+    deleteCloseModalKeyEscepe()
+    deleteHandlclickOnOverlay(popupNewCard)
+
+    formNewPlace.reset()
+
 };
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
-formCardElement.addEventListener('submit', handleFormCard);
 
-/*----------button-lick--------------*/
-lickButton.forEach( button => {
-    button.addEventListener('click', function(evt){
-        evt.target.classList.toggle('card__like-button_is-active')
-    })
-});
+formNewPlace.addEventListener('submit', handleFormCard);
 
 /*----------slowly-open-------------------*/
-for (let i = 0; i < popups.length; i++) {
-    popups[i].classList.add('popup_is-animated');
-    console.log(popups[i]);
-    popups[i].style.visibility = 'visible'
-}
+popups.forEach(popup => {
+    popup.classList.add('popup_is-animated');
+    popup.style.visibility = 'visible'
+});
 
-export {cardTemplate, popupImge, popups};
+export {cardTemplate, popupImge, popups, buttonCloseModal, buttonLikePopupCards, formInputProfileName, formInputProfileJob, popupEditProfile, popupNewCard, buttomAddCard, buttomEdit, }
