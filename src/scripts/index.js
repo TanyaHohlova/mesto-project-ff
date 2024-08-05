@@ -1,7 +1,7 @@
 import '../pages/index.css';
 import {initialCards} from './cards.js';
-import {deleteCloseModalKeyEscepe,deleteHandlclickOnOverlay, closeButtonModal, openPopupEditProfile, openPopupNewCard, removeClassOpenPopup} from './modal.js';
-import {createCard, onDeleteCard, onLikeCard, openImagePopup} from './card.js'
+import {addClassOpenPopup, deleteCloseModalKeyEscepe, closeButtonModal, removeClassOpenPopup} from './modal.js';
+import {createCard, onDeleteCard, onLikeCard} from './card.js';
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector('#card-template').content;
 
@@ -10,20 +10,26 @@ const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
 
 // @todo: Вывести карточки на страницу
+const objCreateCard = {
+    cardData: '', 
+    onDeleteCard, 
+    onLikeCard, 
+    openImagePopup
+};
 
 initialCards.forEach(function(cardData){
-    const addTemplate = createCard(cardData, onDeleteCard, onLikeCard, openImagePopup);
+    objCreateCard.cardData = cardData;
+    objCreateCard.openImagePopup = openImagePopup;
+
+    const addTemplate = createCard(objCreateCard);
     cardList.append(addTemplate);
 });
 
 const buttomEdit =  document.querySelector('.profile__edit-button');
 const buttomAddCard =  document.querySelector('.profile__add-button');
-const buttomImge = document.querySelectorAll('.card__image');
-const buttonCloseModal = document.querySelectorAll('.popup__close');
+const buttonCloseModalList = document.querySelectorAll('.popup__close');
 
-const buttonLikePopupCards = document.querySelectorAll('.card__like-button');
-
-const popups = document.querySelectorAll('.popup');
+const popupsList = document.querySelectorAll('.popup');
 
 const popupEditProfile = document.querySelector('.popup_type_edit');
 const profileTitle = document.querySelector('.profile__title');
@@ -42,11 +48,41 @@ const formInputCardLink = document.querySelector('.popup__input_type_url');
 
 
 /*-----------open------------------*/
-openPopupEditProfile(popupEditProfile);
-openPopupNewCard(popupNewCard);
+buttomEdit.addEventListener('click', handlOpenPopupEditProfile);
+buttomAddCard.addEventListener('click', handlopenPopupNewCard);
 
+
+function handlOpenPopupEditProfile(){
+    const InputTextName = document.querySelector('.profile__title').textContent;
+    const InputTextJob = document.querySelector('.profile__description').textContent;
+
+    formInputProfileName.value = InputTextName;
+    formInputProfileJob.value = InputTextJob;
+
+    addClassOpenPopup(popupEditProfile);
+};
+
+function handlopenPopupNewCard(){
+    addClassOpenPopup(popupNewCard);
+};
+
+function openCardElement(element) {
+    const popupElement = popupImge.querySelector('.popup__image');
+    popupElement.src = element.src;
+    popupElement.alt = element.alt;
+
+    const popupItem = popupImge.querySelector('.popup__caption');
+    popupItem.textContent = element.alt;
+    addClassOpenPopup(popupImge);
+};
+
+function openImagePopup(evt){
+    //console.log('create openPopup');
+        const element= evt.target;      
+        openCardElement(element);
+};
 /*-------------close-button--------------*/
-closeButtonModal(buttonCloseModal);
+closeButtonModal(buttonCloseModalList);
 
 /*-------------editing-profile---------------*/
 function handleFormProfile(evt) {
@@ -58,9 +94,8 @@ function handleFormProfile(evt) {
     profileTitle.textContent = titleValue ;
     profileDescription.textContent = jobValue;
 
-    removeClassOpenPopup(popupEditProfile)
-    deleteCloseModalKeyEscepe()
-    deleteHandlclickOnOverlay(popupEditProfile)
+    removeClassOpenPopup(popupEditProfile);
+    deleteCloseModalKeyEscepe();
 };
 
 formEditProfile.addEventListener('submit', handleFormProfile);
@@ -68,31 +103,28 @@ formEditProfile.addEventListener('submit', handleFormProfile);
 /*---------------editing-card----------------------*/
 function handleFormCard(evt) {
     evt.preventDefault(); 
-
     const titleValue = formInputCardName.value;
     const LinkValue = formInputCardLink.value;
 
     const initialCard = {name:titleValue, link:LinkValue};
-    const element = createCard(initialCard, onDeleteCard, onLikeCard, openImagePopup )
+    objCreateCard.cardData = initialCard;
+    const element = createCard(objCreateCard);
 
-    console.log(element)
     cardList.prepend(element);
 //  https://porodysobak.ru/wp-content/uploads/2023/02/kanarskij-dog-3.jpeg
 
-    removeClassOpenPopup(popupNewCard)
-    deleteCloseModalKeyEscepe()
-    deleteHandlclickOnOverlay(popupNewCard)
-
-    formNewPlace.reset()
+    removeClassOpenPopup(popupNewCard);
+    deleteCloseModalKeyEscepe();
+    formNewPlace.reset();
 
 };
 
 formNewPlace.addEventListener('submit', handleFormCard);
 
 /*----------slowly-open-------------------*/
-popups.forEach(popup => {
+popupsList.forEach(popup => {
     popup.classList.add('popup_is-animated');
-    popup.style.visibility = 'visible'
+    popup.style.visibility = 'visible';
 });
 
-export {cardTemplate, popupImge, popups, buttonCloseModal, buttonLikePopupCards, formInputProfileName, formInputProfileJob, popupEditProfile, popupNewCard, buttomAddCard, buttomEdit, }
+export {cardTemplate}
