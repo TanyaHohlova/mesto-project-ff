@@ -19,7 +19,6 @@ const objCreateCard = {
 const buttomEdit =  document.querySelector('.profile__edit-button');
 const buttomAddCard =  document.querySelector('.profile__add-button');
 const buttonCloseModalList = document.querySelectorAll('.popup__close');
-const buttonEditImgAvatar = document.querySelector('.ovner');
 
 const popupsList = document.querySelectorAll('.popup');
 
