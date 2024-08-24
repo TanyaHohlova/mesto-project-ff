@@ -45,8 +45,8 @@ function listeneEscepe(){
 };
 
 function handlcloseModalEscepe(evt) {
-    const content = evt.target;
     if (evt.code === 'Escape') {
+        const content = evt.target;
         const element = content.querySelector('.popup_is-opened');
         removeClassOpenPopup(element);
     }
