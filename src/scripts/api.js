@@ -14,8 +14,6 @@ export const getEditProfile = () => {
         },
     })
     .then(handelRespons)
-    // .then(res => console.log(res))
-    .catch( err => console.log('Ошибка', err))
 };
 
 export const getNewCard = () => {
@@ -26,11 +24,8 @@ export const getNewCard = () => {
         }
         })
     .then(handelRespons)
-    // .then(res => console.log(res))
-    .catch( err => console.log('Ошибка', err))
 };
 
-//inputName, inputAbout
 export const aditEditProfile = (inputName, inputAbout) => {
     return fetch(`${PATH}/users/me`, {
             method: 'PATCH',
@@ -39,18 +34,14 @@ export const aditEditProfile = (inputName, inputAbout) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                // name: 'Marie Skłodowska Curie',
-                // about: 'Physicist and Chemist'
                 name: inputName,
                 about: inputAbout
             })
     })
     .then(handelRespons)
-    //.then(res => console.log(res))
-    .catch( err => console.log(err))
 };
 
-export const aditNewCard = (obj) => {
+export const editNewCard = (obj) => {
     return fetch(`${PATH}/cards`, {
             method: 'POST',
             headers: {
@@ -63,7 +54,6 @@ export const aditNewCard = (obj) => {
             })
     })
     .then(handelRespons)
-    .catch( err => console.log(err))
 };
 
 
@@ -75,7 +65,6 @@ export  const serverDeleteCard = (cardId) => {
         }
     })
     .then(handelRespons)
-    .catch( err => console.log(err))
 }
 
 export  const addLakesCard = (cardId) => {
@@ -86,7 +75,6 @@ export  const addLakesCard = (cardId) => {
         }
     })
     .then(handelRespons)
-    .catch( err => console.log(err))
 }
 
 export  const removeLakesCard = (cardId) => {
@@ -97,7 +85,6 @@ export  const removeLakesCard = (cardId) => {
         }
     })
     .then(handelRespons)
-    .catch( err => console.log(err))
 }
 
 export const aditAvatarUser = (link) => {
@@ -112,5 +99,4 @@ export const aditAvatarUser = (link) => {
             })
     })
     .then(handelRespons)
-    .catch( err => console.log(err))
 };

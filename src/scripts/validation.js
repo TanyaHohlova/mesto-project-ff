@@ -102,12 +102,12 @@ const enableValidation = (objValidation) => {
 // все настройки передаются при вызове
 
 function clearValidationErrors(formElement, objValidation) {
-  console.log(objValidation.inputSelector);
+  //console.log(objValidation.inputSelector);
 
     //console.log(formElement.validity)
     const inputList = Array.from(formElement.querySelectorAll(objValidation.inputSelector));
 
-    console.log(inputList);
+    //console.log(inputList);
     // Найдём в текущей форме кнопку отправки
     const buttonElement = formElement.querySelector(`${objValidation.submitButtonSelector}`);
 

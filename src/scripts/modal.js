@@ -1,9 +1,6 @@
 /*-----------open------------------*/
 function addClassOpenPopup(element){
     element.classList.add('popup_is-opened');
-    console.log(element)
-    console.log(element)
-
     listeneEscepe();
     clickOnOverlay(element);
 
@@ -49,9 +46,8 @@ function listeneEscepe(){
 
 function handlcloseModalEscepe(evt) {
     const content = evt.target;
-    const element = content.querySelector('.popup_is-opened');
     if (evt.code === 'Escape') {
-        //console.log('listener Escepe');
+        const element = content.querySelector('.popup_is-opened');
         removeClassOpenPopup(element);
     }
 };
