@@ -1,6 +1,9 @@
 /*-----------open------------------*/
 function addClassOpenPopup(element){
     element.classList.add('popup_is-opened');
+    console.log(element)
+    console.log(element)
+
     listeneEscepe();
     clickOnOverlay(element);
 
@@ -40,7 +43,7 @@ function  handlclickOnOverlay(evt){
 
 /*-------------close-Escepe---------------*/
 function listeneEscepe(){
-    console.log('create listener Escepe');
+    //console.log('create listener Escepe');
     document.addEventListener('keyup', handlcloseModalEscepe);
 };
 
